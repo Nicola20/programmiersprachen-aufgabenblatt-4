@@ -142,6 +142,19 @@ T& front() {
 T& back() {
     return last_ -> value;
 }
+
+/*4.4*/
+
+void clear() {
+    while(!empty()){
+        pop_back();
+    }
+}
+
+//Destruktor mit clear
+~List() {
+    clear();
+}
 // not implemented yet
 // do not forget about the initialiser list !
    private:
