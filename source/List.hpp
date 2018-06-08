@@ -28,21 +28,70 @@ struct ListNode
 template <typename T>
 class ListIterator
 {
-   public :
-   // not implemented yet
-   // do not forget about the initialiser lists !
-   private :
+   public:
+   using Self = ListIterator<T>;
+   using value_type = T; 
+   using pointer = T*;
+   using reference = T&;
+   using difference_type = ptrdiff_t;
+   using iterator_category = std::bidirectional_iterator_tag;
+
+   ListIterator ():
+       node(0) {}
+
+   ListIterator (ListNode<T>* n):
+       node(n)
+       {}
+
+
+   reference operator* () const {
+       return node -> value; 
+   } 
+
+   pointer operator-> () const {
+       return &(node -> value);
+   } 
+
+   Self& operator++ () {
+      node = node -> next;
+      return *this;
+   } 
+
+   Self operator++ (int) {
+        ListIterator old(*this);
+        node = node->next;
+       return old;
+   } 
+
+   //Überprüfen ob 2 Pointer auf das selbe Element verweisen
+   bool operator== (Self const& x) const {
+       return (node == x.node);
+   }
+    
+   bool operator!= (Self const& x) const {
+       return (node != x.node);
+   } 
+
+   Self next() const {
+     if (node)
+        return ListIterator (node -> next);
+      else
+        return ListIterator (nullptr);
+   }
+
+
+   private:
    ListNode <T>* node;
 };
 
 template <typename T>
 class ListConstIterator
 {
-   public :
+   public:
    // not implemented yet
    // do not forget about the initialiser lists !
-   private :
-   ListNode <T>* node;
+   private:
+   ListNode<T>* node;
 };
 
 template <typename T>
