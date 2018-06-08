@@ -97,6 +97,48 @@ class ListConstIterator
    ListNode<T>* node;
 };
 
+/*4.7*/
+template <typename T>
+bool operator== (List<T> const& xs, List<T> const& ys)
+{
+auto i =xs.begin();
+auto j =ys.begin();
+bool result = true;
+  if(xs.size() != ys.size()) {
+      result = false;
+  } else {
+      while(i != nullptr) {
+          if (*i != *j){
+              result =false;
+          }
+          ++i;
+          ++j;
+      }
+  }
+  return result;
+}
+
+template <typename T>
+bool operator!= (List<T> const& xs, List<T> const& ys)
+{
+auto i =xs.begin();
+auto j =ys.begin();
+//bool result = false;
+  if(xs.size() != ys.size()) {
+       return true;
+  } else {
+      while(i != nullptr) {
+          if (*i != *j){
+              return true;
+              break;
+          }
+          ++i;
+          ++j;
+      }
+  }
+}
+
+
 template <typename T>
 class List
 {
@@ -225,6 +267,7 @@ void clear() {
            return ListIterator<T>(last_);
        }
    }
+
 
 // not implemented yet
 // do not forget about the initialiser list !

@@ -112,6 +112,66 @@ list.push_front(42);
 REQUIRE (42 == *list.begin());
 }
 
+TEST_CASE ("check if listelements are equal","[list_operator]")
+{
+List <int> list;
+list.push_front(42);
+list.push_front(41);
+list.push_front(4);
+list.push_front(1);
+list.push_front(31);
+list.push_front(18);
+
+List <int> list2;
+list.push_front(42);
+list.push_front(41);
+list.push_front(4);
+list.push_front(1);
+list.push_front(31);
+list.push_front(18);
+
+List <int> list3;
+list.push_front(42);
+list.push_front(41);
+list.push_front(44);
+list.push_front(1);
+list.push_front(7);
+list.push_front(18);
+
+REQUIRE (operator==(list,list2) == true);
+REQUIRE (operator==(list,list3) == false);
+}
+
+TEST_CASE ("check if listelements are unequal","[list_operator]")
+{
+List <int> list;
+list.push_front(42);
+list.push_front(41);
+list.push_front(4);
+list.push_front(1);
+list.push_front(31);
+list.push_front(18);
+
+List <int> list2;
+list.push_front(42);
+list.push_front(41);
+list.push_front(4);
+list.push_front(1);
+list.push_front(31);
+list.push_front(18);
+
+List <int> list3;
+list.push_front(42);
+list.push_front(41);
+list.push_front(44);
+list.push_front(1);
+list.push_front(7);
+list.push_front(18);
+
+REQUIRE (operator!=(list,list2) == false);
+REQUIRE (operator!=(list,list3) == true);
+}
+
 
 int main(int argc, char* argv[]) {
 
