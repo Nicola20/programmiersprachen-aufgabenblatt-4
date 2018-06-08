@@ -36,6 +36,8 @@ class ListIterator
    using difference_type = ptrdiff_t;
    using iterator_category = std::bidirectional_iterator_tag;
 
+   friend class List<T>;
+
    ListIterator ():
        node(0) {}
 
@@ -80,6 +82,7 @@ class ListIterator
    }
 
 
+
    private:
    ListNode <T>* node;
 };
@@ -107,6 +110,7 @@ class List
    using const_iterator = ListConstIterator <T>;
 
    friend struct ListNode<T>;
+   friend class ListIterator<T>;
 
    /*Aufgabe 4.2*/
    List():  //Default Constructor
@@ -204,6 +208,24 @@ void clear() {
 ~List() {
     clear();
 }
+
+   /*4.6*/
+   ListIterator<T> begin() const {
+       if (empty()) {
+           return ListIterator<T>(nullptr);
+       } else {
+           return ListIterator<T>(first_);
+       }
+   }
+
+   ListIterator<T> end() const {
+       if(empty()) {
+           return ListIterator<T>(nullptr);
+       } else {
+           return ListIterator<T>(last_);
+       }
+   }
+
 // not implemented yet
 // do not forget about the initialiser list !
    private:

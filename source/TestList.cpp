@@ -4,6 +4,7 @@
 #include "List.hpp"
 #include <iostream>
 
+
 TEST_CASE ("list_default_constructor","[default]")
 {
   List <int> list1;
@@ -93,6 +94,22 @@ list.push_front(3);
 list.push_front(4);
 list.clear();
 REQUIRE (list.empty() == true);
+}
+
+TEST_CASE ("should be an empty range after default construction","[iterators]")
+{
+List <int> list;
+auto b = list.begin();
+auto e = list.end();
+REQUIRE (b == e);
+}
+
+
+TEST_CASE ("provide access to the first element with begin","[iterators]")
+{
+List <int> list;
+list.push_front(42);
+REQUIRE (42 == *list.begin());
 }
 
 
