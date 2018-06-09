@@ -172,6 +172,17 @@ REQUIRE (operator!=(list,list2) == false);
 REQUIRE (operator!=(list,list3) == true);
 }
 
+TEST_CASE ("copy constructor","[constructor]")
+{
+List <int> list;
+list.push_front(1);
+list.push_front(2);
+list.push_front(3);
+list.push_front(4);
+List <int> list2{list};
+REQUIRE (list == list2);
+}
+
 
 int main(int argc, char* argv[]) {
 

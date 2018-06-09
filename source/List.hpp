@@ -160,6 +160,19 @@ class List
    first_{nullptr},
    last_{nullptr} {}
 
+
+//Copy Constructor
+
+List(List<T> const& list):                //already implemented list
+    first_{nullptr},                     //set *this on nullptr
+    last_{nullptr} {
+      auto i = list.begin();            //iterate through list
+      while(i != nullptr){
+        push_back(*i);                //push all elements into *this
+        ++i;
+      }
+}
+
    bool empty() const{
        return (size_ == 0);
    }
@@ -267,6 +280,22 @@ void clear() {
            return ListIterator<T>(last_);
        }
    }
+   
+   /*4.9*/
+   /*
+   void insert(ListIterator<T> const& pos, T const& v){
+       if (pos == begin()) {
+           push_front(v);
+       } else if (pos == end()) {
+           push_back (v);          
+       } else {
+          ListNode <T>* newNode = new ListNode<T>(v, pos.prev().node, pos.node);
+          pos.node->prev = newNode;
+          newNode->prev->next = newNode;
+          ++ size_;
+
+         }
+   } */
 
 
 // not implemented yet
