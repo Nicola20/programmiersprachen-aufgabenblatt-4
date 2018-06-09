@@ -182,6 +182,57 @@ list.push_front(4);
 List <int> list2{list};
 REQUIRE (list == list2);
 }
+/*
+TEST_CASE ("move constructor","[constructor]")
+{
+List <int> list;
+list.push_front(1);
+list.push_front(2);
+list.push_front(3);
+list.push_front(4);
+List <int> list2 = std::move(list);
+REQUIRE (0 == list.size());
+REQUIRE (list.empty());
+REQUIRE (4 == list2.size());
+}*/
+
+TEST_CASE ("reverse list itself","[reverse]")
+{
+List <int> list;
+list.push_front(1);
+list.push_front(2);
+list.push_front(3);
+list.push_front(4);
+
+List <int> list2;
+list.push_front(4);
+list.push_front(3);
+list.push_front(2);
+list.push_front(1);
+
+list.reverse();
+
+REQUIRE (list2 == list);
+}
+
+TEST_CASE ("reverse list and save in new list","[reverse]")
+{
+List <int> list;
+list.push_front(1);
+list.push_front(2);
+list.push_front(3);
+list.push_front(4);
+
+List <int> list2;
+list.push_front(4);
+list.push_front(3);
+list.push_front(2);
+list.push_front(1);
+
+//reverse(list);
+
+REQUIRE (list2 == reverse(list));
+}
 
 
 int main(int argc, char* argv[]) {

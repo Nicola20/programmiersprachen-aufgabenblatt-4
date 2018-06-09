@@ -4,6 +4,7 @@
 # include <cstddef>
 #include <assert.h>
 #include <utility>
+#include <algorithm>
 
 // List.hpp
 template <typename T> 
@@ -12,7 +13,7 @@ class List;
 template <typename T>
 struct ListNode
 {   /*
-    ListNode (T const& v, ListNode prev, ListNode next ) :
+    ListNode (T const& v, ListNode prev, ListNode next):
      value{v},
      prev{prev},
      next{next} {}  */
@@ -56,6 +57,17 @@ class ListIterator
 
    Self& operator++ () {
       node = node -> next;
+      return *this;
+   } 
+
+   Self operator-- (int) {   //not sure if needed in case that reverse doesnt function delete operator --
+        ListIterator old(*this);
+        node = node->prev;
+       return old;
+   } 
+
+      Self& operator-- () {
+      node = node -> prev;
       return *this;
    } 
 
@@ -281,8 +293,8 @@ void clear() {
        }
    }
    
-   /*4.9*/
-   /*
+/*4.9*/
+
    void insert(ListIterator<T> const& pos, T const& v){
        if (pos == begin()) {
            push_front(v);
@@ -295,15 +307,40 @@ void clear() {
           ++ size_;
 
          }
-   } */
+   } 
 
+/*4.10*/
+/*
+void reverse() {
+   auto i= begin();
+   auto j = end();
+   while(i != j) {
+       std::swap(*i, *j); //may not function correctly
+       ++i;
+       --j;
+   }
+}*/
 
-// not implemented yet
-// do not forget about the initialiser list !
    private:
    std::size_t size_ = 0;
    ListNode <T>* first_ = nullptr;
    ListNode <T>* last_ = nullptr;
 
 };
+
+   /*4.10*/
+   /*
+   template <typename T>
+   List<T> reverse ( List<T> const& list) {  // Muss ich auch hier <T> nach List verwenden oder brauch ich 
+       List<T> newList;  //Alternativ List<T> newList;
+       auto i= list.begin();
+       while (i != nullptr) {
+           newList.push_front(*i);
+       }
+       return newList;  //ohne * wenn Alternative genutzt wird 
+   } */
+
+
+
+
 # endif // # define BUW_LIST_HPP
