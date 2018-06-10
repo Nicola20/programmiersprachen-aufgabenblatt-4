@@ -1,7 +1,7 @@
 # ifndef BUW_LIST_HPP
 # define BUW_LIST_HPP
 
-# include <cstddef>
+#include <cstddef>
 #include <assert.h>
 #include <utility>
 #include <algorithm>
@@ -12,11 +12,11 @@ class List;
 
 template <typename T>
 struct ListNode
-{   /*
-    ListNode (T const& v, ListNode prev, ListNode next):
+{   
+    ListNode (T const& v, ListNode *prev, ListNode *next):
      value{v},
      prev{prev},
-     next{next} {}  */
+     next{next} {}  
 
     //Default Konstruktor erstellen
 
@@ -40,7 +40,7 @@ class ListIterator
    friend class List<T>;
 
    ListIterator ():
-       node(0) {}
+       node(nullptr) {}
 
    ListIterator (ListNode<T>* n):
        node(n)
@@ -52,24 +52,14 @@ class ListIterator
    } 
 
    pointer operator-> () const {
-       return &(node -> value);
+       //return &(node -> value);
+       return *node;
    } 
 
    Self& operator++ () {
       node = node -> next;
       return *this;
-   } 
-
-   Self operator-- (int) {   //not sure if needed in case that reverse doesnt function delete operator --
-        ListIterator old(*this);
-        node = node->prev;
-       return old;
-   } 
-
-      Self& operator-- () {
-      node = node -> prev;
-      return *this;
-   } 
+   }  
 
    Self operator++ (int) {
         ListIterator old(*this);
@@ -89,6 +79,13 @@ class ListIterator
    Self next() const {
      if (node)
         return ListIterator (node -> next);
+      else
+        return ListIterator (nullptr);
+   }
+
+      Self prev() const {
+     if (node)
+        return ListIterator (node -> prev);
       else
         return ListIterator (nullptr);
    }
@@ -113,21 +110,22 @@ class ListConstIterator
 template <typename T>
 bool operator== (List<T> const& xs, List<T> const& ys)
 {
-auto i =xs.begin();
-auto j =ys.begin();
-bool result = true;
-  if(xs.size() != ys.size()) {
-      result = false;
-  } else {
-      while(i != nullptr) {
-          if (*i != *j){
-              result =false;
-          }
-          ++i;
-          ++j;
-      }
-  }
-  return result;
+    auto i = xs.begin();
+    auto j = ys.begin();
+
+    if(xs.size() != ys.size()) {
+        return false;
+    } else {
+        for(unsigned int c = 0; c < xs.size(); c++){
+            if(*i == *j){
+                ++i;
+                ++j;
+            }
+            else 
+                return false;   
+        }
+    }   
+    return true;
 }
 
 template <typename T>
@@ -163,8 +161,8 @@ class List
    using iterator = ListIterator <T>;
    using const_iterator = ListConstIterator <T>;
 
-   friend struct ListNode<T>;
-   friend class ListIterator<T>;
+   //friend struct ListNode<T>;
+   //friend class ListIterator<T>;
 
    /*Aufgabe 4.2*/
    List():  //Default Constructor
@@ -196,27 +194,34 @@ List(List<T> const& list):                //already implemented list
    /*Aufgabe 4.3*/
    void push_front (T const& v) {  //neues Element am Anfang einfügen
       if(empty()){
-        first_ = new ListNode<T>{v,nullptr,nullptr};  
-        last_ = first_;
+          //std::cout<<"klappt.\n";
+        ListNode<T>* tmp = new ListNode<T>{v,nullptr,nullptr};
+        last_ = tmp;
+        first_ = tmp;
         ++ size_;
+        //std::cout<<"hey there.\n";
       } else {
-          first_ = new ListNode<T>{v,nullptr,first_};
-          first_ -> next -> prev = first_;
+          //std::cout<<"klappt.\n";
+          ListNode<T>* tmp = new ListNode<T>{v,nullptr,first_};
+          first_ -> prev = tmp;
+          first_ = tmp;
+          //first_ -> next -> prev = first_;
           ++ size_;
+          //std::cout<<"hey there.\n";
         }
    }
 
     void push_back(T const& v) {  //neues Element am Ende einfügen 
-    if (empty()) {
-      last_ = new ListNode<T>{v, nullptr, nullptr};
-      first_ = last_;
-    } else  {
-      last_ = new ListNode<T>{v, last_, nullptr};
-      last_ -> prev -> next = last_;
-    }
+       if (empty()) {
+         last_ = new ListNode<T>{v, nullptr, nullptr};
+         first_ = last_;
+       } else  {
+          last_ = new ListNode<T>{v, last_, nullptr};
+          last_ -> prev -> next = last_;
+         }
 
     ++ size_;
-}
+   }
 
  void pop_front()  //erstes Element aus Liste löschen
  {
@@ -227,6 +232,8 @@ List(List<T> const& list):                //already implemented list
      assert(first_ != nullptr);
         delete first_;
         first_=nullptr;
+        last_ = nullptr;
+        --size_;
      } 
      if (size() > 1) {
          assert (first_ != nullptr);
@@ -234,10 +241,10 @@ List(List<T> const& list):                //already implemented list
              first_ = first_ -> next;
              -- size_;
      }
- }
+ }  
 
   void pop_back()  //leztes Element aus Liste löschen
- {
+ { 
      if (empty()) {
       std::cout<<"The list does not contain any elements. \n";
      }  
@@ -245,6 +252,8 @@ List(List<T> const& list):                //already implemented list
      assert(last_ != nullptr);
         delete last_;
         last_=nullptr;
+        first_ = nullptr;
+        --size_;
      } 
     if (size() > 1) {
          assert (last_ != nullptr);
@@ -252,9 +261,9 @@ List(List<T> const& list):                //already implemented list
              last_ = last_ -> prev;
              -- size_;
      }
- }
+ } 
 
-
+ 
 T& front() {
     return first_ -> value;
 }
@@ -274,9 +283,10 @@ void clear() {
 //Destruktor mit clear
 ~List() {
     clear();
-}
+} 
 
-   /*4.6*/
+
+   //4.6
    ListIterator<T> begin() const {
        if (empty()) {
            return ListIterator<T>(nullptr);
@@ -293,7 +303,7 @@ void clear() {
        }
    }
    
-/*4.9*/
+//4.9
 
    void insert(ListIterator<T> const& pos, T const& v){
        if (pos == begin()) {
@@ -309,17 +319,15 @@ void clear() {
          }
    } 
 
-/*4.10*/
-/*
+//4.10
+
 void reverse() {
-   auto i= begin();
-   auto j = end();
-   while(i != j) {
-       std::swap(*i, *j); //may not function correctly
-       ++i;
-       --j;
+   
+   for(auto i = first_ ; i != nullptr; i = i-> prev) {
+       std::swap(i -> prev, i -> next);
    }
-}*/
+  std::swap(first_,last_);
+}
 
    private:
    std::size_t size_ = 0;
@@ -328,18 +336,32 @@ void reverse() {
 
 };
 
-   /*4.10*/
-   /*
+   //4.10
+  /*
    template <typename T>
-   List<T> reverse ( List<T> const& list) {  // Muss ich auch hier <T> nach List verwenden oder brauch ich 
-       List<T> newList;  //Alternativ List<T> newList;
-       auto i= list.begin();
-       while (i != nullptr) {
-           newList.push_front(*i);
-       }
+   List<T> reverse (List<T> list) {  // Muss ich auch hier <T> nach List verwenden oder brauch ich 
+       List<T> newList = list.reverse();
        return newList;  //ohne * wenn Alternative genutzt wird 
    } */
 
+
+   template <typename T>
+   List<T> reverse (List<T> list){
+       list.reverse();
+       return list;
+   }
+
+/*
+template <typename T> 
+List<T> reverse(List<T> const& list){
+    List<T> list2;
+    auto a = list.begin();
+    while(a != nullptr){
+        list2.push_front(*a);           //push elements of list reversed into list2
+        ++a;
+    }
+return list2;
+*/
 
 
 
