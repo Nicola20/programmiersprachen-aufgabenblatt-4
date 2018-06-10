@@ -183,6 +183,17 @@ List(List<T> const& list):                //already implemented list
       }
 }
 
+/*4.13*/
+//Move Constructor, moves elements from one list to the other, "steals them"
+    List (List<T>&& list):                    
+        size_{list.size_},                 
+        first_{list.first_},
+        last_{list.last_} {
+            list.first_ = nullptr;
+            list.last_ = nullptr;
+            list.size_ = 0;
+    }
+
    bool empty() const{
        return (size_ == 0);
    }

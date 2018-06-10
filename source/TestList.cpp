@@ -183,7 +183,7 @@ list.push_front(4);
 List <int> list2{list};
 REQUIRE (list == list2);
 }
-/*
+
 TEST_CASE ("move constructor","[constructor]")
 {
 List <int> list;
@@ -195,7 +195,7 @@ List <int> list2 = std::move(list);
 REQUIRE (0 == list.size());
 REQUIRE (list.empty());
 REQUIRE (4 == list2.size());
-}*/
+}
 
 TEST_CASE ("reverse list itself","[reverse]")
 {
