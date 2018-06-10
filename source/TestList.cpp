@@ -2,6 +2,7 @@
 #include "catch.hpp"
 #include "List.hpp"
 #include <iostream>
+#include <vector>
 
 
 TEST_CASE ("list_default_constructor","[default]")
@@ -268,6 +269,45 @@ TEST_CASE ("add an element with insert ", "[Aufg. 4.9]")
   auto k = list.begin();      //list now: 9672143
   REQUIRE (*k == 9);  
   REQUIRE (list.size() == 6);
+}
+
+TEST_CASE ("pre- and postincrement  ", "[increment]")
+{
+  List <int> list;
+  list.push_front(8);
+  list.push_front(9);
+  list.push_front(5);
+  list.push_front(6);
+  auto b = list.begin();
+  auto e = list.end();
+
+  REQUIRE (*b == 6);              //>6 5 9 8  erster Wert
+  REQUIRE (*(++b) == 5);          // 6>5 9 8  wird erhöht und neuer Knoten wird ausgegeben
+  REQUIRE (*(b++) == 5);          // 6 5>9 8  wird erhöht und alter Wert wird ausgegeben
+  REQUIRE (*(++b) == 8);          // 6 5 9>8  wird erhöht und neuer Knoten wird ausgegeben
+  REQUIRE ((++b) == nullptr);     // 6 5 9 8> wird erhöht und nullptr wird ausgegeben
+  REQUIRE (*e == 8);              // 6 5 9 8< letzter Wert
+  REQUIRE (*(e++) == 8);          // 6 5 9 8  < wird erhöht und alter Wert wird ausgegeben 
+  REQUIRE (e == nullptr);         // 6 5 9 8  < nullptr wird ausgegeben
+}  //bis hierher funzt alles
+
+
+TEST_CASE ("List in Vector ", "[Aufg. 4.11]")
+{
+  List <int> list;
+  list.push_front(3);              
+  list.push_front(9);
+  list.push_front(7);
+  list.push_front(6);
+
+  std::vector<int> v (list.size());
+
+  std::copy(list.begin(), list.bend(), std::begin(v));
+
+  REQUIRE (v[0] == 6);   
+  REQUIRE (v[1] == 7);
+  REQUIRE (v[2] == 9);   
+  REQUIRE (v[3] == 3);
 }
 
 

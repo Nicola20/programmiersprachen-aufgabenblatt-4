@@ -40,10 +40,10 @@ class ListIterator
    friend class List<T>;
 
    ListIterator ():
-       node(nullptr) {}
+       node{nullptr} {}
 
    ListIterator (ListNode<T>* n):
-       node(n)
+       node{n}
        {}
 
 
@@ -340,6 +340,11 @@ void reverse() {
   std::swap(first_,last_);
 }
 
+ //iterator points to element behind last element
+    ListIterator <T> bend() const {        
+        return ListIterator<T>();
+    }
+
    private:
    std::size_t size_ = 0;
    ListNode <T>* first_ = nullptr;
@@ -348,32 +353,21 @@ void reverse() {
 };
 
    //4.10
+
   /*
-   template <typename T>
-   List<T> reverse (List<T> list) {  // Muss ich auch hier <T> nach List verwenden oder brauch ich 
-       List<T> newList = list.reverse();
-       return newList;  //ohne * wenn Alternative genutzt wird 
-   } */
-
-
    template <typename T>
    List<T> reverse (List<T> list){
        list.reverse();
        return list;
-   }
+   } */
 
-/*
-template <typename T> 
-List<T> reverse(List<T> const& list){
-    List<T> list2;
-    auto a = list.begin();
-    while(a != nullptr){
-        list2.push_front(*a);           //push elements of list reversed into list2
-        ++a;
-    }
-return list2;
-*/
-
-
+   template<typename T>
+        List<T> reverse(List<T> const& list) {  //swaps the list an returns a new list
+            List<T> newList;
+            for(auto a = list.begin(); a != nullptr; ++a) {
+                 newList.push_front(*a);
+            }
+                return newList;
+        } 
 
 # endif // # define BUW_LIST_HPP
